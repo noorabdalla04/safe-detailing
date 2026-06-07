@@ -1,5 +1,5 @@
 /* ============================================================
-   SAFE DETAILING | interactions
+   SAYF DETAILING | interactions
    ============================================================ */
 (function () {
   'use strict';
