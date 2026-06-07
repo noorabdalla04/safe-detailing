@@ -152,6 +152,7 @@ h1,h2,h3{ margin:0; line-height:1.02; letter-spacing:-.01em; }
 }
 .nav-phone svg{ width:16px; height:16px; color:var(--amber); }
 @media(max-width:900px){ .nav-links{ display:none; } }
+@media(max-width:560px){ .nav-phone{ display:none; } .brand-name, .brand-sub{ white-space:nowrap; } }
 
 /* ============================================================
    HERO
@@ -178,7 +179,7 @@ h1,h2,h3{ margin:0; line-height:1.02; letter-spacing:-.01em; }
 .fact:last-child{ border-bottom:0; }
 .fact svg{ flex:none; width:19px; height:19px; color:var(--amber); stroke-width:2; }
 .fact b{ font-family:var(--ff-arch); font-weight:700; font-size:15.5px; color:var(--bone); }
-.fact span{ font-size:14.5px; color:var(--mist-2); }
+.fact span{ font-size:14.5px; color:var(--mist); }
 .fact .sep{ color:var(--ink-4); }
 
 /* hero before/after card */
@@ -360,10 +361,10 @@ h1,h2,h3{ margin:0; line-height:1.02; letter-spacing:-.01em; }
 .contact-card:first-of-type{ border-top:0; padding-top:0; }
 .contact-ico{ flex:none; width:46px; height:46px; border-radius:9px; background:var(--ink-2); border:1px solid var(--ink-3); color:var(--amber); display:grid; place-items:center; }
 .contact-ico svg{ width:21px; height:21px; stroke-width:1.7; }
-.contact-card .l{ font-family:var(--ff-arch); font-weight:600; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--mist-2); }
+.contact-card .l{ font-family:var(--ff-arch); font-weight:600; font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:var(--mist); }
 .contact-card .v{ font-family:var(--ff-arch); font-weight:700; font-size:21px; color:var(--bone); margin-top:3px; }
 .contact-card .v.sm{ font-size:17px; }
-.contact-card .s{ font-size:14px; color:var(--mist); margin-top:3px; }
+.contact-card .s{ font-size:14px; color:var(--mist); margin-top:7px; }
 
 .form{ background:var(--bone); color:var(--ink); border-radius:var(--radius-lg); padding:clamp(24px,3vw,38px); box-shadow:var(--shadow-pop); }
 .form h3{ font-family:var(--ff-disp); font-weight:800; text-transform:uppercase; font-size:22px; letter-spacing:-.01em; }
@@ -390,7 +391,7 @@ h1,h2,h3{ margin:0; line-height:1.02; letter-spacing:-.01em; }
 .choice input:checked + span{ }
 .choice label:has(input:checked){ background:var(--ink); color:var(--bone); border-color:var(--ink); }
 .form .btn{ width:100%; justify-content:center; margin-top:6px; }
-.form-note{ font-size:12.5px; color:var(--mist-2); text-align:center; margin-top:14px; }
+.form-note{ font-size:12.5px; color:var(--ink-soft); text-align:center; margin-top:14px; }
 .book-cta-row{ display:flex; gap:12px; margin-top:30px; flex-wrap:wrap; }
 @media(max-width:860px){ .book-grid{ grid-template-columns:1fr; } .field-row{ grid-template-columns:1fr; } }
 
@@ -406,7 +407,7 @@ h1,h2,h3{ margin:0; line-height:1.02; letter-spacing:-.01em; }
 .footer-col a, .footer-col p{ display:block; font-size:15px; color:var(--mist); margin:0 0 9px; transition:color .15s; }
 .footer-col a:hover{ color:var(--bone); }
 .footer-bottom{ border-top:1px solid var(--ink-3); padding-block:22px; display:flex; flex-wrap:wrap; gap:10px 24px; justify-content:space-between; font-size:13px; color:var(--mist-2); }
-.confirm-note{ font-size:12px; color:#456063; }
+.confirm-note{ font-size:12px; color:var(--mist); }
 
 /* ============================================================
    STICKY MOBILE CALL BAR

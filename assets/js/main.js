@@ -48,6 +48,7 @@
     el.setAttribute('role', 'slider');
     el.setAttribute('aria-valuemin', '0');
     el.setAttribute('aria-valuemax', '100');
+    el.setAttribute('aria-valuenow', '50');
     el.addEventListener('keydown', function (e) {
       var cur = parseFloat(handle.style.left) || 50;
       if (e.key === 'ArrowLeft') { cur = Math.max(0, cur - 4); }
