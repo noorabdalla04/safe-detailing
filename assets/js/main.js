@@ -1,82 +1,163 @@
-/* =========================================================
-   Safe Detailing | interactions (garage editorial)
-   ========================================================= */
+/* ============================================================
+   SAFE DETAILING | interactions
+   ============================================================ */
 (function () {
-  "use strict";
+  'use strict';
 
-  var yr = document.getElementById("yr");
-  if (yr) yr.textContent = String(new Date().getFullYear());
+  /* ---------- Before / After sliders ---------- */
+  function initBA(el) {
+    var before = el.querySelector('.before-wrap');
+    var handle = el.querySelector('.ba-handle');
+    var knob = el.querySelector('.ba-knob');
+    var dragging = false;
 
-  /* sticky masthead state */
-  var head = document.querySelector(".masthead");
-  var onScroll = function () { if (head) head.classList.toggle("scrolled", window.scrollY > 8); };
-  onScroll();
-  window.addEventListener("scroll", onScroll, { passive: true });
+    function apply(pct) {
+      before.style.clipPath = 'inset(0 ' + (100 - pct) + '% 0 0)';
+      handle.style.left = pct + '%';
+      knob.style.left = pct + '%';
+      el.setAttribute('aria-valuenow', Math.round(pct));
+    }
+    function setPos(clientX) {
+      var r = el.getBoundingClientRect();
+      var x = clientX - r.left;
+      var pct = Math.max(0, Math.min(100, (x / r.width) * 100));
+      apply(pct);
+    }
 
-  /* mobile menu */
-  var burger = document.getElementById("burger");
-  var nav = document.getElementById("nav");
-  if (burger && head) {
-    var setMenu = function (open) {
-      head.classList.toggle("menu-open", open);
-      burger.setAttribute("aria-expanded", open ? "true" : "false");
-      burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-    };
-    burger.addEventListener("click", function () { setMenu(!head.classList.contains("menu-open")); });
-    if (nav) nav.addEventListener("click", function (e) { if (e.target.closest("a")) setMenu(false); });
-    window.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
-  }
+    function down(e) {
+      dragging = true;
+      el.classList.add('dragging');
+      setPos((e.touches ? e.touches[0] : e).clientX);
+      e.preventDefault();
+    }
+    function move(e) {
+      if (!dragging) return;
+      setPos((e.touches ? e.touches[0] : e).clientX);
+    }
+    function up() { dragging = false; el.classList.remove('dragging'); }
 
-  /* staggered reveal */
-  var reveals = document.querySelectorAll("[data-reveal]");
-  reveals.forEach(function (el) {
-    var d = el.getAttribute("data-d");
-    if (d) el.style.transitionDelay = (parseInt(d, 10) - 1) * 0.09 + "s";
-  });
-  if ("IntersectionObserver" in window && reveals.length) {
+    el.addEventListener('mousedown', down);
+    el.addEventListener('touchstart', down, { passive: false });
+    window.addEventListener('mousemove', move);
+    window.addEventListener('touchmove', move, { passive: false });
+    window.addEventListener('mouseup', up);
+    window.addEventListener('touchend', up);
+
+    // keyboard
+    el.setAttribute('tabindex', '0');
+    el.setAttribute('role', 'slider');
+    el.setAttribute('aria-valuemin', '0');
+    el.setAttribute('aria-valuemax', '100');
+    el.addEventListener('keydown', function (e) {
+      var cur = parseFloat(handle.style.left) || 50;
+      if (e.key === 'ArrowLeft') { cur = Math.max(0, cur - 4); }
+      else if (e.key === 'ArrowRight') { cur = Math.min(100, cur + 4); }
+      else return;
+      apply(cur);
+      e.preventDefault();
+    });
+
+    // gentle auto-hint on first view
+    var hinted = false;
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (en) {
-        if (en.isIntersecting) { en.target.classList.add("is-in"); io.unobserve(en.target); }
+        if (en.isIntersecting && !hinted) {
+          hinted = true;
+          var seq = [62, 38, 50];
+          var i = 0;
+          (function tick() {
+            if (i >= seq.length) return;
+            before.style.transition = 'clip-path .5s cubic-bezier(.22,.61,.36,1)';
+            handle.style.transition = 'left .5s cubic-bezier(.22,.61,.36,1)';
+            knob.style.transition = 'left .5s cubic-bezier(.22,.61,.36,1)';
+            apply(seq[i]);
+            i++;
+            setTimeout(function () {
+              if (i >= seq.length) {
+                before.style.transition = '';
+                handle.style.transition = '';
+                knob.style.transition = '';
+              }
+              tick();
+            }, 520);
+          })();
+          io.disconnect();
+        }
       });
-    }, { rootMargin: "0px 0px -7% 0px", threshold: 0.06 });
-    reveals.forEach(function (el) { io.observe(el); });
-  } else {
-    reveals.forEach(function (el) { el.classList.add("is-in"); });
+    }, { threshold: 0.55 });
+    io.observe(el);
   }
 
-  /* pricing buttons preselect package */
-  var pkg = document.getElementById("bf-package");
-  document.querySelectorAll("[data-pkg]").forEach(function (b) {
-    b.addEventListener("click", function () {
-      var v = b.getAttribute("data-pkg");
-      if (pkg && v) Array.prototype.forEach.call(pkg.options, function (o) {
-        if (o.value === v || o.text === v) pkg.value = o.value;
+  document.querySelectorAll('.ba').forEach(initBA);
+
+  /* ---------- Scroll reveal ---------- */
+  var reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var ro = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          en.target.classList.add('in');
+          ro.unobserve(en.target);
+        }
       });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    reveals.forEach(function (r, i) {
+      r.style.transitionDelay = (Math.min(i % 4, 3) * 70) + 'ms';
+      ro.observe(r);
+    });
+  } else {
+    reveals.forEach(function (r) { r.classList.add('in'); });
+  }
+
+  /* ---------- Booking form -> mailto fallback ---------- */
+  var form = document.getElementById('book-form');
+  if (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var d = new FormData(form);
+      var name = (d.get('name') || '').toString().trim();
+      var phone = (d.get('phone') || '').toString().trim();
+      var vehicle = (d.get('vehicle') || '-').toString();
+      var pkg = (d.get('package') || '-').toString();
+      var note = (d.get('note') || '').toString().trim();
+
+      var subject = 'Detailing request: ' + (name || 'New enquiry') + ' (' + vehicle + ')';
+      var lines = [
+        'Name: ' + (name || '-'),
+        'Phone: ' + (phone || '-'),
+        'Vehicle: ' + vehicle,
+        'Package of interest: ' + pkg,
+        '',
+        'Notes:',
+        (note || '-')
+      ];
+      var href = 'mailto:Sayfudein3@gmail.com'
+        + '?subject=' + encodeURIComponent(subject)
+        + '&body=' + encodeURIComponent(lines.join('\n'));
+      window.location.href = href;
+
+      var btn = form.querySelector('button[type="submit"]');
+      if (btn) {
+        var t = btn.querySelector('.btn-label');
+        if (t) t.textContent = 'Opening your email…';
+      }
+    });
+  }
+
+  /* ---------- Year ---------- */
+  var y = document.getElementById('year');
+  if (y) y.textContent = new Date().getFullYear();
+
+  /* ---------- Smooth offset for sticky nav anchors ---------- */
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var id = a.getAttribute('href');
+      if (id.length < 2) return;
+      var target = document.querySelector(id);
+      if (!target) return;
+      e.preventDefault();
+      var top = target.getBoundingClientRect().top + window.pageYOffset - 70;
+      window.scrollTo({ top: top, behavior: 'smooth' });
     });
   });
-
-  /* booking form -> compose email */
-  var form = document.getElementById("bookForm");
-  var note = document.getElementById("bookNote");
-  var EMAIL = "Sayfudein3@gmail.com";
-  if (form) {
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var name = (form.name.value || "").trim();
-      var phone = (form.phone.value || "").trim();
-      if (!name || !phone) {
-        if (note) { note.textContent = "Please add your name and phone so we can reach you."; note.classList.remove("ok"); }
-        (name ? form.phone : form.name).focus();
-        return;
-      }
-      var vehicle = form.vehicle.value, plan = form["package"].value, msg = (form.message.value || "").trim();
-      var subject = "Work order: " + name + " (" + plan + ")";
-      var body =
-        "Hi Safe Detailing,\n\nI'd like to book a detail.\n\n" +
-        "Name: " + name + "\nPhone: " + phone + "\nVehicle: " + vehicle + "\nPackage: " + plan + "\n" +
-        (msg ? "Notes: " + msg + "\n" : "") + "\nThanks!";
-      window.location.href = "mailto:" + EMAIL + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
-      if (note) { note.textContent = "Opening your email app. If nothing happens, call or text (343) 571-4226."; note.classList.add("ok"); }
-    });
-  }
 })();
