@@ -1,5 +1,5 @@
 /* =========================================================
-   Safe Detailing — interactions
+   Safe Detailing interactions
    ========================================================= */
 (function () {
   "use strict";
@@ -43,6 +43,10 @@
   document.querySelectorAll("[data-ba]").forEach(function (ba) {
     var range = ba.querySelector(".ba__range");
     if (!range) return;
+    // Force the documented default so browser form-restoration can't leave the
+    // slider stuck at a previous position on reload/back-forward navigation.
+    var def = range.getAttribute("value");
+    if (def !== null) range.value = def;
     var apply = function () {
       ba.style.setProperty("--pos", range.value + "%");
     };
@@ -126,7 +130,7 @@
       var pkg = form["package"].value;
       var msg = (form.message.value || "").trim();
 
-      var subject = "Booking request — " + name + " (" + pkg + ")";
+      var subject = "Booking request: " + name + " (" + pkg + ")";
       var body =
         "Hi Safe Detailing,\n\n" +
         "I'd like to book a detail.\n\n" +

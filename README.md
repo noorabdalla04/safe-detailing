@@ -1,7 +1,7 @@
-# Safe Detailing — website
+# Safe Detailing website
 
 A single-page marketing site for a mobile car-detailing business in Ottawa.
-Plain HTML / CSS / JS — no build step. Hosted on GitHub Pages.
+Plain HTML / CSS / JS, no build step. Hosted on GitHub Pages.
 
 ## Live site
 Published via GitHub Pages (see the repo's **Settings → Pages** for the URL).
@@ -13,7 +13,7 @@ Published via GitHub Pages (see the repo's **Settings → Pages** for the URL).
 - **Photos:** `assets/img/` (`ba*-before/after.jpg` are the comparison sliders, `result*.jpg` the gallery)
 
 ## Things to confirm / change
-- **Business name:** "Safe Detailing" is a working name — no business name was in the
+- **Business name:** "Safe Detailing" is a working name. No business name was in the
   source material. To rename, search-and-replace `Safe Detailing` (and the `Safe` wordmark)
   across `index.html`.
 - **Contact:** phone `(343) 571-4226` and email `Sayfudein3@gmail.com` are wired into the

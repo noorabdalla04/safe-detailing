@@ -1,5 +1,5 @@
 /* =========================================================
-   Safe Detailing — styles
+   Safe Detailing styles
    Aesthetic: dark "detailing studio", iced-cyan accent.
    Type: Archivo (display) + Hanken Grotesk (body).
    ========================================================= */
@@ -119,7 +119,7 @@ a{color:inherit;text-decoration:none}
 .header__cta{display:flex;align-items:center;gap:12px}
 .btn--call svg{opacity:.8}
 
-.nav-toggle{display:none;flex-direction:column;gap:5px;background:none;border:0;padding:10px;cursor:pointer;margin-left:auto}
+.nav-toggle{display:none;flex-direction:column;align-items:center;justify-content:center;gap:5px;background:none;border:0;padding:10px;min-width:44px;min-height:44px;cursor:pointer;margin-left:auto}
 .nav-toggle span{width:24px;height:2px;background:var(--ink);border-radius:2px;transition:transform .25s ease,opacity .2s ease}
 .nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
 .nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
@@ -148,6 +148,7 @@ a{color:inherit;text-decoration:none}
 /* ---------- Before / After component ---------- */
 .ba{
   --pos:50%;
+  margin:0;
   position:relative;aspect-ratio:4/3;border-radius:var(--radius);overflow:hidden;
   border:1px solid var(--line-2);box-shadow:var(--shadow-lg);background:#000;
   touch-action:pan-y;isolation:isolate;
@@ -207,14 +208,14 @@ a{color:inherit;text-decoration:none}
 /* ---------- Work / before-after grid ---------- */
 .section--work{background:linear-gradient(180deg,transparent, rgba(255,255,255,.015))}
 .ba-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-.gallery{display:grid;grid-template-columns:repeat(3,1fr);grid-auto-rows:1fr;gap:16px;margin-top:22px}
+.gallery{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:22px}
 .shot{margin:0;border-radius:var(--radius-sm);overflow:hidden;border:1px solid var(--line);position:relative;aspect-ratio:4/3}
 .shot img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
 .shot:hover img{transform:scale(1.05)}
-.shot--tall{grid-row:span 2;aspect-ratio:auto}
+.shot--tall{grid-row:auto;aspect-ratio:4/3}
 
 /* ---------- Pricing ---------- */
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:start}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch}
 .plan{
   position:relative;
   background:linear-gradient(180deg,var(--surface),var(--bg-2));
@@ -234,7 +235,7 @@ a{color:inherit;text-decoration:none}
 .plan__prices--custom{grid-template-columns:1fr}
 .plan__prices div{display:flex;flex-direction:column;gap:2px;text-align:center}
 .plan__prices .amt{font-family:var(--font-display);font-weight:800;font-size:1.5rem;color:var(--ink);letter-spacing:-.02em}
-.plan__prices .lbl{font-size:.72rem;color:var(--muted-2);text-transform:uppercase;letter-spacing:.08em}
+.plan__prices .lbl{font-size:.72rem;color:#8b97a3;text-transform:uppercase;letter-spacing:.08em}
 .plan .ticks{margin-bottom:24px}
 .plan .btn{margin-top:auto}
 
