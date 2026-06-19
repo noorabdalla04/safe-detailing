@@ -328,6 +328,19 @@
         </div>
 
         <div class="field">
+          <label>Service</label>
+          <div class="choice">
+            <label><input type="radio" name="service" value="Mobile" checked><span>Mobile (we come to you)</span></label>
+            <label><input type="radio" name="service" value="Drop off"><span>Drop off</span></label>
+          </div>
+        </div>
+
+        <div class="field" id="addr-field">
+          <label for="f-address">Your address</label>
+          <input id="f-address" name="address" type="text" autocomplete="street-address" placeholder="Street and city, so we know where to come">
+        </div>
+
+        <div class="field">
           <label>Package of interest</label>
           <div class="choice">
             <label><input type="radio" name="package" value="Showroom" checked><span>Showroom</span></label>
@@ -339,7 +352,7 @@
 
         <div class="field">
           <label for="f-note">Anything we should know?</label>
-          <textarea id="f-note" name="note" placeholder="Pet hair, bad stains, road salt, preferred days and times, and your address."></textarea>
+          <textarea id="f-note" name="note" placeholder="Pet hair, bad stains, road salt, preferred days and times."></textarea>
         </div>
 
         <button class="btn btn-amber" type="submit">

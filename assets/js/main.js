@@ -121,17 +121,18 @@
       var vehicle = (d.get('vehicle') || '-').toString();
       var pkg = (d.get('package') || '-').toString();
       var note = (d.get('note') || '').toString().trim();
+      var service = (d.get('service') || 'Mobile').toString();
+      var address = (d.get('address') || '').toString().trim();
 
       var subject = 'Detailing request: ' + (name || 'New enquiry') + ' (' + vehicle + ')';
       var lines = [
         'Name: ' + (name || '-'),
         'Phone: ' + (phone || '-'),
         'Vehicle: ' + vehicle,
-        'Package of interest: ' + pkg,
-        '',
-        'Notes:',
-        (note || '-')
+        'Service: ' + (service === 'Mobile' ? 'Mobile (we come to you)' : service)
       ];
+      if (service === 'Mobile') { lines.push('Address: ' + (address || '-')); }
+      lines.push('Package of interest: ' + pkg, '', 'Notes:', (note || '-'));
       var href = 'mailto:Sayfudein3@gmail.com'
         + '?subject=' + encodeURIComponent(subject)
         + '&body=' + encodeURIComponent(lines.join('\n'));
@@ -143,6 +144,18 @@
         if (t) t.textContent = 'Opening your email…';
       }
     });
+
+    // Service type toggles the address field
+    var addrField = document.getElementById('addr-field');
+    function syncAddr() {
+      var sel = form.querySelector('input[name="service"]:checked');
+      var mobile = !sel || sel.value === 'Mobile';
+      if (addrField) addrField.style.display = mobile ? '' : 'none';
+    }
+    form.querySelectorAll('input[name="service"]').forEach(function (r) {
+      r.addEventListener('change', syncAddr);
+    });
+    syncAddr();
   }
 
   /* ---------- Year ---------- */
